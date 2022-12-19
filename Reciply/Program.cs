@@ -4,6 +4,7 @@ namespace Reciply
     using Microsoft.EntityFrameworkCore;
 
     using Reciply.Data;
+    using Reciply.Data.Models;
 
     public class Program
     {
@@ -17,10 +18,15 @@ namespace Reciply
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<User>(options => 
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
+            })
                 .AddEntityFrameworkStores<ReciplyDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddApplicationServices();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

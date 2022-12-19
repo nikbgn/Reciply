@@ -1,0 +1,12 @@
+﻿@model AllRecipesQueryModel
+
+<div class="container">
+	@foreach (var recipe in Model.Recipes)
+	{
+		<div class="bg-dark text-light">
+			<h1>@recipe.Name</h1>
+			<img src="data:image;base64,@Convert.ToBase64String(recipe.RecipeImage)" />
+			<button class="btn-success">Read more</button>
+		</div>
+	}
+</div>

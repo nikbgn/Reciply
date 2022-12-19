@@ -1,0 +1,29 @@
+﻿@model CreateRecipeViewModel
+
+<form method="post" enctype="multipart/form-data" name="RecipeImage" >
+	<div class="mb-3">
+		<label asp-for="@Model.Name" class="form-label"></label>
+		<input asp-for="@Model.Name" class="form-control" aria-required="true" />
+		<span asp-validation-for="Name" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="@Model.Ingridients" class="form-label"></label>
+		<input asp-for="@Model.Ingridients" class="form-control" aria-required="true" />
+		<span asp-validation-for="Ingridients" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="@Model.CookingInstructions" class="form-label"></label>
+		<textarea asp-for="@Model.CookingInstructions" class="form-control" aria-required="true"></textarea>
+		<span asp-validation-for="CookingInstructions" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<input accept=".png,.jpg,.jpeg" asp-for="RecipeImage" type="file" class="form-control" onchange="filecheck(this)" />
+	</div>
+	<div class="mb-3">
+		<input class="btn btn-success" type="submit" value="Добави" />
+	</div>
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
