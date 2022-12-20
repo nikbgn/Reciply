@@ -24,5 +24,22 @@
             string searchTerm = null,
             int currentPage = 1,
             int recipesPerPage = 1);
+
+        /// <summary>
+        /// Deletes a recipe from the database.
+        /// </summary>
+        /// <param name="recipeId"></param>
+        /// <returns></returns>
+        
+        public Task DeleteRecipeAsync(Guid recipeId);
+
+        /// <summary>
+        /// Gets the recipes created from an user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        
+        public Task<IEnumerable<RecipeServiceModel>> GetMyRecipesAsync(string userId);
+
     }
 }

@@ -20,7 +20,8 @@
         public string Ingridients { get; set; } = null!;
 
         [Required(ErrorMessage = ThisFieldIsRequiredMessage)]
-        public string CookingInstructions { get; set; } = null!;
+		[Display(Name = "Cooking Instructions")]
+		public string CookingInstructions { get; set; } = null!;
 
         [FromForm]
 		public IFormFile RecipeImage { get; set; }

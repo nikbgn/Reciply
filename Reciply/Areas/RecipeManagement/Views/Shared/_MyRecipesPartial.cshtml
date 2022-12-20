@@ -1,0 +1,23 @@
+﻿@model RecipeServiceModel
+
+
+
+<div class="col">
+	<div class="card shadow-sm h-50">
+		<img src="data:image;base64,@Convert.ToBase64String(Model.RecipeImage)" class="card-img-top" alt="Recipe image thumbnail.">
+		<div class="card-body">
+			<h4>@Model.Name</h4>
+			<p class="card-text" style="white-space: nowrap; text-overflow: ellipsis; overflow:hidden;">
+				@Model.Ingridients
+			</p>
+			<div>
+				<form method="get">
+					<input type="submit" class="btn btn-sm btn-primary m-1" value="Edit" asp-route-recipeId="@Model.Id" asp-area="RecipeManagement" asp-controller="Home" asp-action="EditRecipe" />
+					<input type="submit" class="btn btn-sm btn-danger m-1" value="Delete" asp-route-recipeId="@Model.Id" asp-area="RecipeManagement" asp-controller="Home" asp-action="Delete" />
+				</form>
+			</div>
+			<div>
+			</div>
+		</div>
+	</div>
+</div>

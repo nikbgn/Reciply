@@ -1,5 +1,7 @@
 ﻿@model CreateRecipeViewModel
 
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
 <form method="post" enctype="multipart/form-data" name="RecipeImage" >
 	<div class="mb-3">
 		<label asp-for="@Model.Name" class="form-label"></label>

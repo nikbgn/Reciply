@@ -19,7 +19,8 @@
             _recipeSerice = recipeSerice;
         }
 
-        public IActionResult Index([FromQuery]AllRecipesQueryModel query)
+		[HttpGet]
+		public IActionResult Index([FromQuery]AllRecipesQueryModel query)
         {
             var recipes = _recipeSerice.All(
                 query.SearchTerm,
@@ -32,20 +33,5 @@
             return View(query);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            var model = new CreateRecipeViewModel();
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateRecipeViewModel model)
-        {
-            var userId = User.Id();
-            await _recipeSerice.CreateRecipeAsync(model, userId);
-
-            return RedirectToAction(nameof(Index));
-        }
     }
 }
