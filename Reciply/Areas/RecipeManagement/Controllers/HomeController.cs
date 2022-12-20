@@ -1,5 +1,9 @@
 ﻿namespace Reciply.Areas.RecipeManagement.Controllers
 {
+	using System.Collections;
+	using System.Net.Mime;
+	using System.Xml.Linq;
+
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +35,42 @@
 			return View(recipes);
 		}
 
+
+		[HttpGet]
+		[Route("/RecipeManagement/Home/EditRecipe/{recipeId}")]
+		public async Task<IActionResult> EditRecipe(Guid recipeId)
+		{
+			var getRecipe = await _recipeService.GetRecipeAsync(recipeId);
+			var recipeToEdit = new CreateRecipeViewModel()
+			{
+				Id = recipeId,
+				CookingInstructions = getRecipe.CookingInstructions,
+				Ingridients = getRecipe.Ingridients,
+				Name = getRecipe.Name
+			};
+			return View(recipeToEdit);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> EditRecipe(CreateRecipeViewModel model)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return View(model);
+				}
+				await _recipeService.EditRecipeAsync(model);
+				return RedirectToAction(nameof(MyRecipes));
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("", ex.Message);
+				return View(model);
+			}
+		}
+
+
 		[HttpGet]
 		public IActionResult Create()
 		{
@@ -50,7 +90,7 @@
 
 				var userId = User.Id();
 				await _recipeService.CreateRecipeAsync(model, userId);
-				return RedirectToAction(nameof(Index));
+				return RedirectToAction(nameof(MyRecipes));
 			}
 			catch (Exception ex)
 			{
@@ -64,7 +104,7 @@
 		public async Task<IActionResult> Delete(Guid recipeId)
 		{
 			await _recipeService.DeleteRecipeAsync(recipeId);
-			return RedirectToAction(nameof(Index));
+			return RedirectToAction(nameof(MyRecipes));
 		}
 	}
 

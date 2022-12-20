@@ -41,5 +41,21 @@
         
         public Task<IEnumerable<RecipeServiceModel>> GetMyRecipesAsync(string userId);
 
-    }
+        /// <summary>
+        /// Edits recipe
+        /// </summary>
+        /// <returns></returns>
+
+        public Task EditRecipeAsync(CreateRecipeViewModel model);
+
+        /// <summary>
+        /// Gets a recipe by id.
+        /// </summary>
+        /// <param name="recipeId"></param>
+        /// <returns></returns>
+        
+        public Task<RecipeServiceModel> GetRecipeAsync(Guid recipeId);
+
+
+	}
 }

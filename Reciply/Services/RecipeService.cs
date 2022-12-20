@@ -154,12 +154,66 @@
 		}
 
 
+
+		/// <summary>
+		/// Edits recipe
+		/// </summary>
+		/// <param name="recipeId"></param>
+		/// <returns></returns>
+
+		public async Task EditRecipeAsync(CreateRecipeViewModel model)
+		{
+			var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == model.Id);
+			if(recipe == null)
+			{
+				_logger.LogError("The given recipe id was invalid.");
+				throw new ArgumentException("The given recipe id was invalid.");
+			}
+
+			try
+			{
+				recipe.Id = model.Id;
+				recipe.Name = model.Name;
+				recipe.Ingridients = model.Ingridients;
+				recipe.CookingInstructions = model.CookingInstructions;
+				if (model.RecipeImage != null)
+				{
+
+					string[] acceptedExtensions = { ".png", ".jpg", ".jpeg" };
+
+					if (!acceptedExtensions.Contains(Path.GetExtension(model.RecipeImage.FileName)))
+					{
+						_logger.LogError("Invalid image format!");
+						throw new FormatException();
+					}
+
+					using MemoryStream ms = new MemoryStream();
+					await model.RecipeImage.CopyToAsync(ms);
+
+					if (ms.Length > 2097152)
+					{
+						_logger.LogError("There was an attempt to upload a file that is too large!");
+						throw new Exception("The size of the image you tried to upload is too large!");
+					}
+
+					recipe.RecipeImage = ms.ToArray();
+				}
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("Something went wrong while editing the recipe.");
+				throw new ApplicationException(ex.Message);
+			}
+		}
+
+
 		/// <summary>
 		/// Gets the recipes created from an user.
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns></returns>
-		
+
 		public async Task<IEnumerable<RecipeServiceModel>> GetMyRecipesAsync(string userId)
 		{
 			var userRecipes = await _context.Users
@@ -191,6 +245,32 @@
 				_logger.LogError("Something went wrong in getting user's recipes.");
 				throw new ApplicationException("Something went wrong in getting user's recipes.");
 			}
+		}
+
+
+		/// <summary>
+		/// Gets a recipe by id.
+		/// </summary>
+		/// <param name="recipeId"></param>
+		/// <returns></returns>
+
+		public async Task<RecipeServiceModel> GetRecipeAsync(Guid recipeId)
+		{
+			var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipeId);
+			if (recipe == null)
+			{
+				_logger.LogError("The given recipe id was invalid.");
+				throw new ArgumentException("The given recipe id was invalid.");
+			}
+
+			return new RecipeServiceModel()
+			{
+				Id = recipe.Id,
+				Name = recipe.Name,
+				Ingridients = recipe.Ingridients,
+				CookingInstructions = recipe.CookingInstructions,
+				RecipeImage = recipe.RecipeImage
+			};
 		}
 	}
 }
