@@ -1,12 +1,52 @@
 ﻿@model AllRecipesQueryModel
-
-<div class="container">
-	@foreach (var recipe in Model.Recipes)
-	{
-		<div class="bg-dark text-light">
-			<h1>@recipe.Name</h1>
-			<img src="data:image;base64,@Convert.ToBase64String(recipe.RecipeImage)" />
-			<button class="btn-success">Read more</button>
+@{
+	ViewBag.Title = "All Recipes";
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<form method="get">
+	<div class="row">
+		<div class="form-group text-center">
+			<label asp-for="SearchTerm"></label>
+			<input asp-for="SearchTerm" class="form-control text-center" placeholder="Search for a recipe name">
 		</div>
+		<div class="text-center">
+			<div class="form-group mt-4 p-2 text-center">
+				<input type="submit" value="Search" class="btn btn-primary btn-lg" />
+			</div>
+		</div>
+	</div>
+</form>
+
+
+@{
+	var previousPage = Model.CurrentPage - 1;
+	if (previousPage < 1) { previousPage = 1; }
+	var maxPage = Math.Ceiling((double)Model.TotalRecipesCount / Model.RecipesPerPage);
+}
+
+<div class="row mb-5">
+	<div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+		<a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)" asp-controller="Recipes" asp-action="Index" asp-route-currentPage="@previousPage" asp-route-searchTerm="@Model.SearchTerm">Previous page</a>
+	</div>
+	@{
+		var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Recipes.Any();
 	}
+	<div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+		<a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)" asp-controller="Recipes" asp-action="Index" asp-route-currentPage="@(Model.CurrentPage + 1)" asp-route-searchTerm="@Model.SearchTerm">Next Page</a>
+	</div>
+</div>
+@if (!Model.Recipes.Any())
+{
+	<h2 class="text-center">No recipes yet...</h2>
+}
+<div class="album py-5 push">
+	<div class="container">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-4">
+			@foreach (var recipe in Model.Recipes)
+			{
+				<partial name="_RecipePartial" model="@recipe" />
+			}
+		</div>
+	</div>
 </div>

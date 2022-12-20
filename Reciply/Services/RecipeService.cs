@@ -21,11 +21,50 @@
         }
 
         /// <summary>
-        /// Creates a recipe.
+        /// Gets all recipes
         /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="recipesPerPage"></param>
         /// <returns></returns>
-        
-        public async Task CreateRecipeAsync(CreateRecipeViewModel model, string userId)
+
+		public RecipeQueryServiceModel All(string searchTerm = null, int currentPage = 1, int recipesPerPage = 1)
+		{
+            var recipesQuery = _context.Recipes.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                recipesQuery = recipesQuery.Where(r => r.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var recipes = recipesQuery
+                .Skip((currentPage - 1) * recipesPerPage)
+                .Take(recipesPerPage)
+                .Select(r => new RecipeServiceModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    RecipeImage = r.RecipeImage,
+                    Ingridients = r.Ingridients,
+                    CookingInstructions = r.CookingInstructions
+                })
+                .ToList();
+
+            var totalRecipes = recipesQuery.Count();
+
+            return new RecipeQueryServiceModel()
+            {
+                TotalRecipesCount = totalRecipes,
+                Recipes = recipes
+            };
+
+		}
+
+		/// <summary>
+		/// Creates a recipe.
+		/// </summary>
+		/// <returns></returns>
+
+		public async Task CreateRecipeAsync(CreateRecipeViewModel model, string userId)
         {
             try
             {
@@ -93,19 +132,6 @@
             
         }
 
-		public async Task<AllRecipesQueryModel> GetAllRecipesAsync()
-		{
-            var allRecipes = new AllRecipesQueryModel();
-
-            allRecipes.Recipes = await _context.Recipes.Select(r => new RecipeServiceModel()
-            {
-                RecipeImage = r.RecipeImage,
-                CookingInstructions = r.CookingInstructions,
-                Ingridients = r.Ingridients,
-                Name = r.Name
-            }).ToListAsync();
-
-            return allRecipes;
-		}
+		
 	}
 }

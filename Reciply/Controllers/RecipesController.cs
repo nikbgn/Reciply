@@ -19,10 +19,17 @@
             _recipeSerice = recipeSerice;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index([FromQuery]AllRecipesQueryModel query)
         {
-            var recipes = await _recipeSerice.GetAllRecipesAsync();
-            return View(recipes);
+            var recipes = _recipeSerice.All(
+                query.SearchTerm,
+                query.CurrentPage,
+                query.RecipesPerPage);
+
+            query.TotalRecipesCount = recipes.TotalRecipesCount;
+            query.Recipes = recipes.Recipes;
+
+            return View(query);
         }
 
         [HttpGet]

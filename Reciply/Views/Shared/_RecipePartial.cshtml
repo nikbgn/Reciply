@@ -1,0 +1,22 @@
+﻿@model RecipeServiceModel
+
+
+
+<div class="col">
+	<div class="card shadow-sm h-50">
+		<img src="data:image;base64,@Convert.ToBase64String(Model.RecipeImage)" class="card-img-top" alt="Recipe image thumbnail.">
+		<div class="card-body">
+			<h4>@Model.Name</h4>
+			<p class="card-text" style="white-space: nowrap; text-overflow: ellipsis; overflow:hidden;">
+				@Model.Ingridients
+			</p>
+			<div>
+				<form>
+					<button class="btn-primary">Read more</button>
+				</form>
+			</div>
+			<div>
+			</div>
+		</div>
+	</div>
+</div>
