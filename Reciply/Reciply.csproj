@@ -19,6 +19,7 @@
   <ItemGroup>
     <Folder Include="Areas\RecipeManagement\Data\" />
     <Folder Include="Areas\RecipeManagement\Models\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
 
 </Project>

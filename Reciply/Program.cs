@@ -24,7 +24,14 @@ namespace Reciply
                 options.SignIn.RequireConfirmedEmail = false;
             })
                 .AddEntityFrameworkStores<ReciplyDbContext>();
-            builder.Services.AddControllersWithViews();
+
+			builder.Services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = "/Account/Login";
+				options.AccessDeniedPath = "/Account/AccessDenied";
+			});
+
+			builder.Services.AddControllersWithViews();
 
             builder.Services.AddApplicationServices();
             var app = builder.Build();
@@ -56,7 +63,7 @@ namespace Reciply
 			app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
+            //app.MapRazorPages();
 
             app.Run();
         }

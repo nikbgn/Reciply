@@ -8,6 +8,7 @@
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<ICheckerService, CheckerService>();
 
             return services;
         }

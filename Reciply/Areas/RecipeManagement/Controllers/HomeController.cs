@@ -1,9 +1,5 @@
 ﻿namespace Reciply.Areas.RecipeManagement.Controllers
 {
-	using System.Collections;
-	using System.Net.Mime;
-	using System.Xml.Linq;
-
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +13,12 @@
 	{
 
 		private readonly IRecipeService _recipeService;
+		private readonly ICheckerService _checkerService;
 
-		public HomeController(IRecipeService recipeService)
+		public HomeController(IRecipeService recipeService, ICheckerService checkerService)
 		{
 			_recipeService = recipeService;
+			_checkerService = checkerService;
 		}
 
 		public IActionResult Index()
@@ -40,6 +38,13 @@
 		[Route("/RecipeManagement/Home/EditRecipe/{recipeId}")]
 		public async Task<IActionResult> EditRecipe(Guid recipeId)
 		{
+			var verifyUser = await _checkerService.CheckIfUserIsRecipeAuthor(User.Id(), recipeId);
+
+			if (!verifyUser)
+			{
+				return RedirectToAction("AccessDenied", "Account", new { area = "" });
+			}
+
 			var getRecipe = await _recipeService.GetRecipeAsync(recipeId);
 			var recipeToEdit = new CreateRecipeViewModel()
 			{
@@ -103,6 +108,13 @@
 		[Route("/RecipeManagement/Home/Delete/{recipeId}")]
 		public async Task<IActionResult> Delete(Guid recipeId)
 		{
+			var verifyUser = await _checkerService.CheckIfUserIsRecipeAuthor(User.Id(), recipeId);
+
+			if (!verifyUser)
+			{
+				return RedirectToAction("AccessDenied", "Account", new { area = "" });
+			}
+
 			await _recipeService.DeleteRecipeAsync(recipeId);
 			return RedirectToAction(nameof(MyRecipes));
 		}

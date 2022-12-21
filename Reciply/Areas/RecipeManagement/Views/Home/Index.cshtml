@@ -1,7 +1,39 @@
 ﻿@{
 	ViewData["Title"] = "Recipe Management Panel";
+	var createRecipe = new AreaManagementCardModel
+			{
+				ButtonValue = "Create Recipe",
+				CardText = "You can create a new recipe from here!",
+				FormArea = "RecipeManagement",
+				FormController = "Home",
+				FormAction = "Create"
+			};
+
+	var myRecipes = new AreaManagementCardModel
+			{
+				ButtonValue = "My Recipes",
+				CardText = "You can view and edit your recipes from here!",
+				FormArea = "RecipeManagement",
+				FormController = "Home",
+				FormAction = "MyRecipes"
+			};
 }
 
-<h1>
-	Welcome to the recipe management area.
-</h1>
+
+<div class="album mt-5 push">
+	<div class="container text-center">
+		<h1>
+			Welcome to the recipe management area.
+		</h1>
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-4">
+			<div class="col">
+				<partial name="_AreaManagementCardPartial"
+						 model="createRecipe" />
+			</div>
+			<div class="col">
+				<partial name="_AreaManagementCardPartial"
+						 model="myRecipes" />
+			</div>
+		</div>
+	</div>
+</div>

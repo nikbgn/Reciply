@@ -1,0 +1,23 @@
+﻿
+@{
+	ViewData["Title"] = "Settings";
+}
+
+<h1 class="text-center mt-5">Settings</h1>
+
+<div class="row push">
+	<div class="col-md-4 offset-md-4">
+		<hr />
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="text-center mb-3">
+			<a class="btn btn-success" asp-controller="Account" asp-action="ChangeEmail">Change Email</a>
+		</div>
+		<div class="text-center mb-3">
+			<a class="btn btn-success" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+		</div>
+		<div class="text-center mb-3">
+			<a class="btn btn-success" asp-area="RecipeManagement" asp-controller="Home" asp-action="Index">Manage Recipes</a>
+		</div>
+	</div>
+</div>
+
