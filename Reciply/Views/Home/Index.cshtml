@@ -1,8 +1,45 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<RecipeServiceModel>
+
+@{
+	ViewData["Title"] = "Home Page";
+	var firstItem = Model.First();
 }
 
 <div class="text-center mt-2">
-    <h1 class="display-4">Welcome to Reciply!</h1>
-    <p>Reciply is a very simple platform for sharing cooking recipies.</p>
+	<h1 class="display-4">Welcome to Reciply!</h1>
+	<p>Reciply is a very simple platform for sharing cooking recipies.</p>
+
+	@if (!Model.Any())
+	{
+		<p>We do not have any recipes yet! Maybe add some?</p>
+	}
+	else
+	{
+		<h2>Take a look at our tasty looking dishes.</h2>
+		<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner p-5">
+				<div class="carousel-item active">
+					<img src="data:image;base64,@Convert.ToBase64String(firstItem.RecipeImage)" class="custom-carousel-img " alt="Image of food">
+					<a class="btn btn-outline-warning mt-2" asp-controller="Recipes" asp-action="RecipeInformation" asp-route-recipeId="@firstItem.Id">@firstItem.Name</a>
+				</div>
+				@foreach (var recipe in Model.Skip(1))
+				{
+					<div class="carousel-item">
+						<img src="data:image;base64,@Convert.ToBase64String(recipe.RecipeImage)" class="custom-carousel-img" alt="Image of food">
+						<a class="btn btn-outline-warning mt-2" asp-controller="Recipes" asp-action="RecipeInformation" asp-route-recipeId="@recipe.Id">@recipe.Name</a>
+					</div>
+				}
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+				data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+				data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	}
 </div>

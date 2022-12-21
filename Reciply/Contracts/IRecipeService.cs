@@ -56,6 +56,14 @@
         
         public Task<RecipeServiceModel> GetRecipeAsync(Guid recipeId);
 
+        /// <summary>
+        /// Gets 3 recipes for first page.
+        /// </summary>
+        /// <returns></returns>
 
-	}
+        public Task<IEnumerable<RecipeServiceModel>> GetRecipesForFirstPage();
+
+
+
+    }
 }

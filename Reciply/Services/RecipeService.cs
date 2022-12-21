@@ -272,5 +272,37 @@
 				RecipeImage = recipe.RecipeImage
 			};
 		}
+
+        /// <summary>
+        /// Gets 3 recipes for first page.
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task<IEnumerable<RecipeServiceModel>> GetRecipesForFirstPage()
+		{
+			try
+			{
+				var recipes = await _context.Recipes
+				.Select(r => new RecipeServiceModel()
+				{
+					Id = r.Id,
+					Name = r.Name,
+					Ingridients = r.Ingridients,
+					CookingInstructions = r.CookingInstructions,
+					RecipeImage = r.RecipeImage
+
+				})
+                .Take(3)
+                .ToListAsync();
+
+				return recipes;
+
+            }
+			catch (Exception ex)
+			{
+				_logger.LogError("Something went wrong while getting recipes.");
+				throw new Exception(ex.Message);
+			}
+		}
 	}
 }
