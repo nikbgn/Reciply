@@ -1,0 +1,22 @@
+﻿@model RecipeServiceModel
+
+@{
+	ViewData["Title"] = Model.Name;
+}
+
+<div class="card m-2 p-2">
+	<div class="container text-center w-50">
+		<img class="img-fluid mt-5" src="data:image;base64,@Convert.ToBase64String(Model.RecipeImage)" alt="Food image." />
+		<h1 class="display-5 mt-3">@Model.Name</h1>
+		<div class="card bg-warning text-light">
+			<hr />
+			<h2>Ingridients:</h2>
+			<p class="mt-3 mb-5 text-center">@Model.Ingridients</p>
+			<hr />
+		</div>
+		<div class="card bg-warning text-light mt-5 mb-5">
+			<h2>Cooking Instructions:</h2>
+			<p class="mt-3 mb-5 text-center">@Model.CookingInstructions</p>
+		</div>
+	</div>
+</div>

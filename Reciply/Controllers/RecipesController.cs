@@ -4,7 +4,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Reciply.Contracts;
-    using Reciply.Extensions;
     using Reciply.Models.Recipe;
 
     [Authorize]
@@ -31,6 +30,14 @@
             query.Recipes = recipes.Recipes;
 
             return View(query);
+        }
+
+        [HttpGet]
+        [Route("/Recipes/RecipeInformation/{recipeId}")]
+        public async Task <IActionResult> RecipeInformation(Guid recipeId)
+        {
+            var recipe = await _recipeSerice.GetRecipeAsync(recipeId);
+            return View(recipe);
         }
 
     }
